@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.graphics.Color;
 import android.view.Gravity;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
@@ -12,12 +13,20 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        TextView text = new TextView(this);
-        text.setText("FREE FIRE SENSI\n\nApp is working!");
-        text.setTextSize(24);
-        text.setTextColor(Color.BLACK);
-        text.setGravity(Gravity.CENTER);
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setGravity(Gravity.CENTER);
+        layout.setPadding(30, 30, 30, 30);
+        layout.setBackgroundColor(Color.WHITE);
 
-        setContentView(text);
+        TextView title = new TextView(this);
+        title.setText("Free Fire Sensi Generator");
+        title.setTextSize(24);
+        title.setTextColor(Color.BLACK);
+        title.setGravity(Gravity.CENTER);
+
+        layout.addView(title);
+
+        setContentView(layout);
     }
 }
