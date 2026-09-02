@@ -3,129 +3,243 @@ package com.freestyle.ntcsensi;
 import android.app.Activity;
 import android.os.Bundle;
 import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
+import android.graphics.Typeface;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.Spinner;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
-@Override
-protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
+    LinearLayout root;
+    LinearLayout content;
 
-    // Main background
-    LinearLayout layout = new LinearLayout(this);
-    layout.setOrientation(LinearLayout.VERTICAL);
-    layout.setPadding(30, 40, 30, 30);
-    layout.setGravity(Gravity.TOP);
-    layout.setBackgroundColor(Color.rgb(18, 18, 18));
+    int BLACK = Color.rgb(8, 8, 8);
+    int RED = Color.rgb(220, 20, 40);
+    int WHITE = Color.WHITE;
+    int GRAY = Color.rgb(35, 35, 35);
 
-    // Title
-    TextView title = new TextView(this);
-    title.setText("FREE FIRE SENSI");
-    title.setTextSize(28);
-    title.setTextColor(Color.WHITE);
-    title.setGravity(Gravity.CENTER);
-    title.setPadding(0, 20, 0, 20);
-    layout.addView(title);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-    // Profile card
-    LinearLayout profile = new LinearLayout(this);
-    profile.setOrientation(LinearLayout.VERTICAL);
-    profile.setGravity(Gravity.CENTER);
-    profile.setPadding(20, 25, 20, 25);
+        showHome();
+    }
 
-    GradientDrawable profileBackground = new GradientDrawable();
-    profileBackground.setColor(Color.rgb(35, 35, 35));
-    profileBackground.setCornerRadius(25);
-    profile.setBackground(profileBackground);
+    private TextView text(String value, int size) {
+        TextView t = new TextView(this);
+        t.setText(value);
+        t.setTextSize(size);
+        t.setTextColor(WHITE);
+        t.setPadding(20, 15, 20, 15);
+        return t;
+    }
 
-    TextView avatar = new TextView(this);
-    avatar.setText("👤");
-    avatar.setTextSize(45);
-    avatar.setGravity(Gravity.CENTER);
+    private Button button(String name) {
+        Button b = new Button(this);
+        b.setText(name);
+        b.setTextColor(WHITE);
+        b.setTextSize(15);
+        b.setBackgroundColor(RED);
+        return b;
+    }
 
-    TextView profileName = new TextView(this);
-    profileName.setText("Player Profile");
-    profileName.setTextSize(20);
-    profileName.setTextColor(Color.WHITE);
-    profileName.setGravity(Gravity.CENTER);
+    private void setup(String title) {
+        root = new LinearLayout(this);
+        root.setOrientation(LinearLayout.VERTICAL);
+        root.setBackgroundColor(BLACK);
 
-    TextView profileInfo = new TextView(this);
-    profileInfo.setText("Sensi Generator");
-    profileInfo.setTextSize(14);
-    profileInfo.setTextColor(Color.LTGRAY);
-    profileInfo.setGravity(Gravity.CENTER);
+        TextView header = text(title, 22);
+        header.setTextColor(RED);
+        header.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+        header.setGravity(Gravity.CENTER);
+        header.setPadding(10, 25, 10, 25);
 
-    profile.addView(avatar);
-    profile.addView(profileName);
-    profile.addView(profileInfo);
+        root.addView(header);
 
-    layout.addView(profile);
+        ScrollView scroll = new ScrollView(this);
+        scroll.setFillViewport(true);
 
-    // Space
-    TextView space = new TextView(this);
-    space.setText("");
-    space.setHeight(25);
-    layout.addView(space);
+        content = new LinearLayout(this);
+        content.setOrientation(LinearLayout.VERTICAL);
+        content.setPadding(20, 10, 20, 30);
 
-    // Sensitivity section
-    TextView sensiTitle = new TextView(this);
-    sensiTitle.setText("SENSITIVITY SETTINGS");
-    sensiTitle.setTextSize(20);
-    sensiTitle.setTextColor(Color.WHITE);
-    sensiTitle.setGravity(Gravity.CENTER);
-    layout.addView(sensiTitle);
+        scroll.addView(content);
+        root.addView(scroll,
+                new LinearLayout.LayoutParams(
+                        -1, 0, 1));
 
-    // Sensitivity values
-    TextView sensi = new TextView(this);
-    sensi.setText(
-            "General: 189\n" +
-            "Red Dot: 125\n" +
-            "2x Scope: 174\n" +
-            "4x Scope: 184\n" +
-            "Sniper Scope: 29\n" +
-            "Free Look: 87"
-    );
-    sensi.setTextSize(17);
-    sensi.setTextColor(Color.WHITE);
-    sensi.setGravity(Gravity.CENTER);
-    sensi.setPadding(20, 20, 20, 20);
+        setContentView(root);
+    }
 
-    layout.addView(sensi);
+    private void showHome() {
+        setup("FREESTYLE N@TC SENSI");
 
-    // Generate button
-    Button generate = new Button(this);
-    generate.setText("GENERATE SENSITIVITY");
-    generate.setTextSize(16);
+        TextView welcome = text(
+                "BLACK • RED GAMING SENSITIVITY",
+                18);
+        welcome.setTextColor(RED);
+        welcome.setGravity(Gravity.CENTER);
+        content.addView(welcome);
 
-    generate.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            sensi.setText(
-                    "General: 190\n" +
-                    "Red Dot: 130\n" +
-                    "2x Scope: 175\n" +
-                    "4x Scope: 180\n" +
-                    "Sniper Scope: 30\n" +
-                    "Free Look: 85"
-            );
-        }
-    });
+        TextView info = text(
+                "\nChoose your device and generate a starting sensitivity preset.\n\n"
+                + "These settings are starting points only. "
+                + "No sensitivity can guarantee 100% headshots.",
+                15);
+        content.addView(info);
 
-    layout.addView(generate);
+        Button generator = button("🎯 SENSITIVITY GENERATOR");
+        content.addView(generator);
 
-    // About button
-    Button about = new Button(this);
-    about.setText("ABOUT APP");
-    about.setTextSize(16);
+        generator.setOnClickListener(v -> showGenerator());
 
-    layout.addView(about);
+        Button drag = button("🖱 HOW TO DRAG");
+        content.addView(drag);
 
-    setContentView(layout);
-}
+        drag.setOnClickListener(v -> showDragGuide());
 
+        Button profile = button("👤 PROFILE");
+        content.addView(profile);
+
+        profile.setOnClickListener(v -> showProfile());
+    }
+
+    private void showGenerator() {
+        setup("SENSITIVITY GENERATOR");
+
+        content.addView(text("SELECT DEVICE", 18));
+
+        Spinner devices = new Spinner(this);
+
+        String[] list = {
+                "Samsung",
+                "Tecno",
+                "Infinix",
+                "Xiaomi",
+                "Redmi",
+                "Oppo",
+                "Vivo",
+                "Realme",
+                "Other Android"
+        };
+
+        ArrayAdapter<String> adapter =
+                new ArrayAdapter<String>(
+                        this,
+                        android.R.layout.simple_spinner_item,
+                        list);
+
+        adapter.setDropDownViewResource(
+                android.R.layout.simple_spinner_dropdown_item);
+
+        devices.setAdapter(adapter);
+        content.addView(devices);
+
+        Button generate = button("GENERATE PRESET");
+        content.addView(generate);
+
+        TextView result = text(
+                "\nYour sensitivity will appear here.",
+                17);
+        result.setTextColor(RED);
+        content.addView(result);
+
+        generate.setOnClickListener(v -> {
+
+            String device =
+                    devices.getSelectedItem().toString();
+
+            String preset =
+                    "DEVICE: " + device
+                    + "\n\n"
+                    + "General: 180"
+                    + "\nRed Dot: 150"
+                    + "\n2× Scope: 165"
+                    + "\n4× Scope: 155"
+                    + "\nSniper: 70"
+                    + "\nFree Look: 100"
+                    + "\n\nUse these as a starting point and "
+                    + "adjust them to your own touch response.";
+
+            result.setText(preset);
+
+            Toast.makeText(
+                    this,
+                    "Preset generated",
+                    Toast.LENGTH_SHORT).show();
+        });
+
+        Button back = button("← BACK");
+        content.addView(back);
+
+        back.setOnClickListener(v -> showHome());
+    }
+
+    private void showDragGuide() {
+        setup("HOW TO DRAG");
+
+        TextView guide = text(
+                "🎯 SMOOTH DRAG GUIDE\n\n"
+                + "1. Keep your finger on the fire button.\n\n"
+                + "2. Start the drag smoothly instead of moving "
+                + "your finger very fast.\n\n"
+                + "3. Move upward in a controlled motion.\n\n"
+                + "4. Practice at different distances.\n\n"
+                + "5. If your aim moves too far upward, reduce "
+                + "your sensitivity slightly.\n\n"
+                + "6. If your aim feels too slow, increase it "
+                + "a little.\n\n"
+                + "There is no setting that guarantees 100% "
+                + "headshots. Practice and device touch response "
+                + "also matter.",
+                16);
+
+        content.addView(guide);
+
+        Button back = button("← BACK");
+        content.addView(back);
+
+        back.setOnClickListener(v -> showHome());
+    }
+
+    private void showProfile() {
+        setup("PROFILE");
+
+        TextView icon = text("👤", 55);
+        icon.setGravity(Gravity.CENTER);
+        content.addView(icon);
+
+        TextView name = text(
+                "FREESTYLE N@TC SENSI",
+                25);
+
+        name.setTextColor(RED);
+        name.setTypeface(
+                Typeface.DEFAULT,
+                Typeface.BOLD);
+        name.setGravity(Gravity.CENTER);
+
+        content.addView(name);
+
+        TextView description = text(
+                "\nSensitivity Generator\n"
+                + "Drag Guide\n"
+                + "Black & Red Gaming Theme\n\n"
+                + "Version 1.0",
+                16);
+
+        description.setGravity(Gravity.CENTER);
+        content.addView(description);
+
+        Button back = button("← BACK");
+        content.addView(back);
+
+        back.setOnClickListener(v -> showHome());
+    }
 }
